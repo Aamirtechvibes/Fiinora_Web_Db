@@ -3593,3 +3593,319 @@ html {
     transform: translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0) scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1)) rotate(var(--tw-exit-rotate, 0));
   }
 }
+
+/* Desktop Optimizations */
+@media (min-width: 1024px) {
+  /* Smooth scrolling for desktop */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Better hover effects on desktop */
+  .card-hover-subtle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 112, 243, 0.15);
+  }
+  
+  /* Optimize for larger screens */
+  .container {
+    max-width: 1280px;
+  }
+}
+
+/* Tablet Optimizations */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Optimize for tablet landscape */
+  @media (orientation: landscape) {
+    .h-\[calc\(100vh-140px\)\] {
+      height: calc(100vh - 100px);
+    }
+  }
+}
+
+/* Print Styles */
+@media print {
+  header, nav, .bottom-navigation {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+  }
+  
+  .glass-card {
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+  }
+}
+
+/* High DPI / Retina Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Sharper text rendering */
+  body {
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
+}
+
+/* Dark Mode Support (Future Enhancement) */
+@media (prefers-color-scheme: dark) {
+  /* Ready for dark mode implementation */
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Landscape Mobile Optimization */
+@media (max-width: 896px) and (orientation: landscape) {
+  /* Reduce header height in landscape */
+  header {
+    height: 48px !important;
+  }
+  
+  /* Adjust bottom nav in landscape */
+  .bottom-navigation {
+    height: 60px !important;
+  }
+  
+  /* Optimize content area */
+  .h-\[calc\(100vh-140px\)\] {
+    height: calc(100vh - 108px);
+  }
+}
+
+/* PWA Standalone Mode */
+@media (display-mode: standalone) {
+  /* Hide browser UI elements when installed as PWA */
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  /* Adjust for notch/dynamic island */
+  header {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* Foldable Devices */
+@media (min-width: 600px) and (max-width: 900px) {
+  /* Optimize for foldable screens */
+  .container {
+    max-width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Ultra-wide Screens */
+@media (min-width: 1920px) {
+  .container {
+    max-width: 1536px;
+  }
+  
+  /* Prevent content from being too wide */
+  main {
+    margin: 0 auto;
+  }
+}
+
+/* Accessibility - Focus Visible */
+*:focus-visible {
+  outline: 2px solid #0070f3;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Loading State */
+.loading-skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 112, 243, 0.05) 0%,
+    rgba(0, 112, 243, 0.1) 50%,
+    rgba(0, 112, 243, 0.05) 100%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s ease-in-out infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Smooth Transitions */
+.smooth-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Glass Effect Enhancement */
+.glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.glass-card-elevated {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Optimize for touch devices */
+@media (hover: none) and (pointer: coarse) {
+  /* Remove hover effects on touch devices */
+  .hover\:scale-105:hover {
+    transform: none;
+  }
+  
+  /* Increase tap target size */
+  button, a, [role="button"] {
+    min-height: 48px;
+    min-width: 48px;
+  }
+}
+
+
+/* AI Chat Layout Fixes */
+.ai-chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Ensure scroll area doesn't hide input */
+[data-radix-scroll-area-viewport] {
+  max-height: 100%;
+  overflow-y: auto !important;
+  padding-bottom: 1rem;
+}
+
+/* Add space at bottom of messages */
+.ai-messages-container {
+  padding-bottom: 2rem;
+}
+
+/* Ensure input is always visible */
+.ai-input-section {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  margin-top: auto;
+}
+
+/* Mobile specific fixes for AI chat */
+@media (max-width: 640px) {
+  .ai-chat-container {
+    height: calc(100vh - 140px);
+  }
+  
+  /* Ensure input doesn't get hidden */
+  .ai-input-section {
+    margin-bottom: env(safe-area-inset-bottom, 0);
+  }
+}
+
+
+/* Fix bottom navigation disappearing on scroll */
+.fixed.bottom-0 {
+  position: fixed !important;
+  bottom: 0 !important;
+  z-index: 50 !important;
+}
+
+/* Ensure pages start from top */
+[role="tabpanel"] {
+  scroll-margin-top: 0;
+}
+
+/* Smooth scroll to top on tab change */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Prevent content from going under bottom nav */
+body {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Mobile PWA fixes */
+@media (max-width: 640px) {
+  /* Ensure bottom nav is always visible */
+  .fixed.bottom-0 {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 9999 !important;
+  }
+  
+  /* Add padding for safe area on iOS */
+  .safe-area-bottom {
+    padding-bottom: max(env(safe-area-inset-bottom), 0.5rem);
+  }
+  
+  /* Prevent scroll issues */
+  body {
+    overflow-x: hidden;
+    position: relative;
+  }
+  
+  /* Ensure content doesn't hide behind nav */
+  main {
+    padding-bottom: 7rem;
+  }
+}
+
+/* Wallet number fixes for mobile */
+@media (max-width: 640px) {
+  /* Make large numbers more compact */
+  .text-5xl {
+    font-size: 1.5rem !important;
+    line-height: 2rem !important;
+  }
+  
+  .text-4xl {
+    font-size: 1.25rem !important;
+    line-height: 1.75rem !important;
+  }
+  
+  .text-3xl {
+    font-size: 1.125rem !important;
+    line-height: 1.5rem !important;
+  }
+  
+  /* Ensure numbers break properly */
+  h1, h2, h3 {
+    word-break: break-all;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Desktop - keep original sizes */
+@media (min-width: 1024px) {
+  .text-5xl {
+    font-size: 3rem;
+    line-height: 1;
+  }
+  
+  .text-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+  
+  .text-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+}

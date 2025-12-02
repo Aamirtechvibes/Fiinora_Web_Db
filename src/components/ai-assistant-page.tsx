@@ -4,6 +4,10 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Badge } from "./ui/badge";
 import { ScrollArea } from "./ui/scroll-area";
+import { useFinancialContext } from '../contexts/FinancialContext';
+import { currentUser } from '../config/userProfile';
+import { formatINR, convertUSDToINR } from '../utils/currency';
+import { generatePersonalizedResponse } from '../utils/aiResponses';
 import { Send, Bot, User, Lightbulb, TrendingUp, PiggyBank, CreditCard, Activity, Zap, Brain, Loader2 } from "lucide-react";
 
 interface Message {
@@ -14,26 +18,23 @@ interface Message {
 }
 
 const quickQuestions = [
-  "How can I improve my credit score?",
-  "What's the best way to save for retirement?",
-  "Should I invest in stocks or bonds?",
+  "How can I improve my CIBIL score?",
+  "What's the best way to save for retirement in India?",
+  "Should I invest in mutual funds or stocks?",
   "How much should I have in my emergency fund?",
   "What are some good budgeting strategies?",
+  "How can I reduce my debt faster?",
 ];
 
-const mockResponses: { [key: string]: string } = {
-  "How can I improve my credit score?": "To improve your credit score, focus on: 1) Pay all bills on time, 2) Keep credit utilization below 30%, 3) Don't close old credit accounts, 4) Monitor your credit report regularly, and 5) Consider becoming an authorized user on someone else's account. Based on your current financial profile, I recommend focusing on paying down your Chase credit card first.",
-  "What's the best way to save for retirement?": "For retirement savings, I recommend: 1) Contribute to your 401(k) up to company match, 2) Consider a Roth IRA for tax-free growth, 3) Aim to save 10-15% of your income, 4) Diversify with index funds, and 5) Increase contributions annually. Given your current savings rate of 33%, you're on track! Consider increasing your emergency fund goal to accelerate retirement savings.",
-  "Should I invest in stocks or bonds?": "Your investment allocation should depend on your age, risk tolerance, and timeline. For someone your age, I'd recommend 70-80% stocks and 20-30% bonds. Based on your current portfolio, you're heavily weighted in tech stocks. Consider adding some bond ETFs or international diversification to reduce risk.",
-  "How much should I have in my emergency fund?": "You should have 3-6 months of expenses in your emergency fund. Based on your monthly expenses of $3,000, you need $9,000-$18,000. You currently have $6,500, so you're 65% complete with your minimum goal. I recommend prioritizing this before increasing other investments.",
-  "What are some good budgeting strategies?": "Effective budgeting strategies include: 1) The 50/30/20 rule (needs/wants/savings), 2) Zero-based budgeting, 3) Envelope method, and 4) Automated savings. Looking at your current spending, you're doing well with an 85% budget utilization. Consider reducing entertainment spending to boost your emergency fund faster."
-};
+
 
 export function AIAssistantPage() {
+  const financialData = useFinancialContext();
+  
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      content: "Hello! I'm your AI financial intelligence system. I can analyze your portfolio, optimize your budget, provide investment insights, and answer any financial questions. How can I assist with your wealth management today?",
+      content: `Hello ${currentUser.name}! I'm your AI financial intelligence system. I can analyze your portfolio, optimize your budget, provide investment insights, and answer any financial questions. I have access to your complete financial profile and can provide personalized recommendations. How can I assist with your wealth management today?`,
       sender: 'ai',
       timestamp: new Date(),
     }
@@ -67,7 +68,7 @@ export function AIAssistantPage() {
     setTimeout(() => {
       const aiResponse: Message = {
         id: messages.length + 2,
-        content: mockResponses[content] || "That's a great question! Based on your financial profile and current market conditions, I'd recommend reviewing your budget allocation and considering diversification strategies. Your current savings rate of 33% is excellent, but there might be opportunities to optimize your investment portfolio for better returns.",
+        content: generatePersonalizedResponse(content, financialData, currentUser.name),
         sender: 'ai',
         timestamp: new Date(),
       };
@@ -81,7 +82,7 @@ export function AIAssistantPage() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-120px)] p-6 space-y-6">
+    <div className="flex flex-col h-[calc(100vh-140px)] sm:h-[calc(100vh-120px)] p-3 sm:p-6 space-y-3 sm:space-y-6 overflow-hidden">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
@@ -105,7 +106,7 @@ export function AIAssistantPage() {
                 <TrendingUp className="h-4 w-4 text-primary" />
                 <span className="text-sm font-semibold text-primary">Portfolio Performance</span>
               </div>
-              <p className="text-sm text-foreground">Your portfolio is up 5.2% this month!</p>
+              <p className="text-sm text-foreground">Your portfolio is up 5.2% this month at {formatINR(financialData.portfolioHoldings.reduce((sum, h) => sum + h.totalValue, 0))}!</p>
               <div className="flex items-center gap-1 mt-1">
                 <Activity className="h-3 w-3 text-primary animate-pulse" />
                 <span className="text-xs text-primary">Live Analysis</span>
@@ -116,7 +117,7 @@ export function AIAssistantPage() {
                 <PiggyBank className="h-4 w-4 text-primary" />
                 <span className="text-sm font-semibold text-primary">Savings Goal</span>
               </div>
-              <p className="text-sm text-foreground">Emergency fund is 65% complete</p>
+              <p className="text-sm text-foreground">Emergency fund: {formatINR(financialData.savingsGoals.find(g => g.name.includes('Emergency'))?.current || 0)} saved</p>
               <div className="flex items-center gap-1 mt-1">
                 <Zap className="h-3 w-3 text-primary animate-pulse" />
                 <span className="text-xs text-primary">On Track</span>
@@ -138,9 +139,9 @@ export function AIAssistantPage() {
       </Card>
 
       {/* Chat Messages */}
-      <Card className="glass-card border-primary/20 flex-1 flex flex-col">
-        <CardHeader className="pb-4">
-          <CardTitle className="flex items-center gap-2">
+      <Card className="glass-card border-primary/20 flex-1 flex flex-col min-h-0 overflow-hidden">
+        <CardHeader className="pb-3 sm:pb-4 flex-shrink-0 border-b border-border/50">
+          <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
             <Bot className="h-5 w-5 text-primary" />
             AI Intelligence Chat
             <div className="flex items-center gap-1 ml-auto">
@@ -149,9 +150,9 @@ export function AIAssistantPage() {
             </div>
           </CardTitle>
         </CardHeader>
-        <CardContent className="flex-1 flex flex-col">
-          <ScrollArea className="flex-1 mb-4">
-            <div className="space-y-4">
+        <CardContent className="flex-1 flex flex-col min-h-0 overflow-hidden p-3 sm:p-6">
+          <ScrollArea className="flex-1 mb-3 sm:mb-4 min-h-0 overflow-auto">
+            <div className="space-y-3 sm:space-y-4 pb-6 sm:pb-8">
               {messages.map((message) => (
                 <div
                   key={message.id}
@@ -230,16 +231,16 @@ export function AIAssistantPage() {
             </div>
           </div>
 
-          {/* Enhanced Input Section */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Activity className="h-3 w-3 text-primary animate-pulse" />
-              <span>Type your question or select from quick options above</span>
+          {/* Enhanced Input Section - Highly Visible & Accessible */}
+          <div className="space-y-2 sm:space-y-3 flex-shrink-0 bg-gradient-to-t from-white/95 to-white/90 backdrop-blur-sm p-3 sm:p-4 rounded-2xl border-2 border-primary/30 shadow-xl mt-auto">
+            <div className="flex items-center gap-2 text-sm sm:text-base font-semibold text-primary">
+              <Activity className="h-4 w-4 sm:h-5 sm:w-5 text-primary animate-pulse flex-shrink-0" />
+              <span className="truncate">Ask me anything about your finances</span>
             </div>
-            <div className="flex gap-3">
-              <div className="flex-1 relative">
+            <div className="flex gap-2 sm:gap-3 items-stretch">
+              <div className="flex-1 relative min-w-0">
                 <Input
-                  placeholder="Ask me anything about your finances..."
+                  placeholder="Type your question here..."
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={(e) => {
@@ -248,28 +249,32 @@ export function AIAssistantPage() {
                     }
                   }}
                   disabled={isLoading}
-                  className="glass-card border-primary/20 bg-input-background pr-4 py-3 text-sm focus:border-primary/40 focus:neon-glow transition-all duration-200"
+                  className="h-12 sm:h-14 border-2 border-primary/40 bg-white shadow-md pr-12 px-4 text-sm sm:text-base font-medium placeholder:text-gray-500 placeholder:font-normal focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-200 w-full rounded-xl"
                   autoFocus
                 />
                 {inputValue.length > 0 && (
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                    <div className="w-3 h-3 bg-primary rounded-full animate-pulse shadow-lg"></div>
                   </div>
                 )}
               </div>
               <Button 
                 onClick={() => handleSendMessage(inputValue)}
                 disabled={!inputValue.trim() || isLoading}
-                className={`px-6 py-3 transition-all duration-300 ${
+                size="lg"
+                className={`h-12 sm:h-14 px-4 sm:px-8 transition-all duration-300 flex-shrink-0 rounded-xl font-bold text-base ${
                   inputValue.trim() 
-                    ? 'bg-primary text-primary-foreground hover:bg-primary/90 neon-glow shadow-lg' 
-                    : 'bg-primary/10 hover:bg-primary/20 text-primary border-primary/20'
+                    ? 'bg-primary text-white hover:bg-primary/90 neon-glow shadow-xl scale-100 hover:scale-105' 
+                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                 }`}
               >
                 {isLoading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
                 ) : (
-                  <Send className="h-4 w-4" />
+                  <>
+                    <Send className="h-5 w-5 sm:h-6 sm:w-6" />
+                    <span className="hidden sm:inline ml-2">Send</span>
+                  </>
                 )}
               </Button>
             </div>

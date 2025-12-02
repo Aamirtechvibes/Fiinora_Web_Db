@@ -6,12 +6,27 @@ import { PersonalManagementPage } from './components/personal-management-page';
 import { InvestmentPage } from './components/investment-page';
 import { AIAssistantPage } from './components/ai-assistant-page';
 import { MapPage } from './components/map-page';
+import { FinancialContextProvider } from './contexts/FinancialContext';
+import { currentUser } from './config/userProfile';
 import { Home, Wallet, Target, TrendingUp, Bot, MapPin, DollarSign, Zap } from "lucide-react";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('home');
 
+  // Scroll to top when tab changes
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    // Force immediate scroll to top
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    // Also scroll the main element
+    const mainElement = document.querySelector('main');
+    if (mainElement) {
+      mainElement.scrollTop = 0;
+    }
+  };
+
   return (
+    <FinancialContextProvider>
     <div className="min-h-screen bg-background">
       {/* Premium Header */}
       <header className="glass-card-elevated border-b border-border sticky top-0 z-50 backdrop-blur-md">
@@ -43,7 +58,7 @@ export default function App() {
               </div>
             </div>
             <div className="relative w-11 h-11 bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 rounded-2xl flex items-center justify-center border border-slate-200 shadow-lg card-hover-subtle">
-              <span className="text-sm font-bold text-slate-700">JD</span>
+              <span className="text-sm font-bold text-slate-700">{currentUser.initials}</span>
               <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 status-online rounded-full border-2 border-white"></div>
             </div>
           </div>
@@ -52,28 +67,28 @@ export default function App() {
 
       {/* Main Content */}
       <main className="container mx-auto max-w-6xl">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsContent value="home" className="mt-0">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+          <TabsContent value="home" className="mt-0" id="home-tab">
             <HomePage />
           </TabsContent>
-          <TabsContent value="wallet" className="mt-0">
+          <TabsContent value="wallet" className="mt-0" id="wallet-tab">
             <WalletPage />
           </TabsContent>
-          <TabsContent value="personal" className="mt-0">
+          <TabsContent value="personal" className="mt-0" id="personal-tab">
             <PersonalManagementPage />
           </TabsContent>
-          <TabsContent value="investment" className="mt-0">
+          <TabsContent value="investment" className="mt-0" id="investment-tab">
             <InvestmentPage />
           </TabsContent>
-          <TabsContent value="ai" className="mt-0">
+          <TabsContent value="ai" className="mt-0" id="ai-tab">
             <AIAssistantPage />
           </TabsContent>
-          <TabsContent value="map" className="mt-0">
+          <TabsContent value="map" className="mt-0" id="map-tab">
             <MapPage />
           </TabsContent>
 
-          {/* Premium Bottom Navigation */}
-          <div className="fixed bottom-0 left-0 right-0 glass-card-elevated border-t border-border backdrop-blur-md">
+          {/* Premium Bottom Navigation - Always Visible */}
+          <div className="fixed bottom-0 left-0 right-0 glass-card-elevated border-t border-border backdrop-blur-md z-50">
             <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent"></div>
             <div className="absolute inset-x-0 top-1 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent"></div>
             <TabsList className="w-full h-22 grid grid-cols-6 bg-transparent p-4 gap-2">
@@ -127,5 +142,6 @@ export default function App() {
         </Tabs>
       </main>
     </div>
+    </FinancialContextProvider>
   );
 }

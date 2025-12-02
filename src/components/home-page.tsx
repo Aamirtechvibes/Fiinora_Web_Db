@@ -5,6 +5,8 @@ import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { Input } from "./ui/input";
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { currentUser } from '../config/userProfile';
+import { formatINR, convertUSDToINR } from '../utils/currency';
 import { TrendingUp, TrendingDown, MessageCircle, Heart, Share, Clock, Zap, DollarSign, Activity, Bell, Target, PiggyBank, AlertCircle, ArrowRight, BarChart3, LineChart, Globe, Users, Bookmark, Image, X, Upload, Send } from "lucide-react";
 
 const newsItems = [
@@ -123,7 +125,6 @@ const communityPosts = [
 export function HomePage() {
   const currentHour = new Date().getHours();
   const greeting = currentHour < 12 ? "Good morning" : currentHour < 18 ? "Good afternoon" : "Good evening";
-  const userName = "Jordan";
   
   // Create Post State
   const [showCreatePost, setShowCreatePost] = useState(false);
@@ -165,9 +166,9 @@ export function HomePage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-            {greeting}, {userName}!
+            {greeting}, {currentUser.name}!
           </h1>
-          <p className="text-muted-foreground mt-1">Your wealth grew by <span className="text-primary font-medium">$1,247</span> this week</p>
+          <p className="text-muted-foreground mt-1">Your wealth grew by <span className="text-primary font-medium">{formatINR(convertUSDToINR(1247))}</span> this week</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-3 px-4 py-2 rounded-2xl glass-card border border-primary/20">
@@ -207,7 +208,7 @@ export function HomePage() {
               </div>
               <div>
                 <p className="text-sm font-medium text-foreground">Savings</p>
-                <p className="text-xs text-muted-foreground">+$340 this week</p>
+                <p className="text-xs text-muted-foreground">+{formatINR(convertUSDToINR(340))} this week</p>
               </div>
             </div>
           </CardContent>
@@ -259,48 +260,48 @@ export function HomePage() {
                 <p className="text-sm text-muted-foreground">S&P 500</p>
                 <LineChart className="h-3 w-3 text-primary" />
               </div>
-              <p className="text-xl font-bold text-foreground">4,267.89</p>
+              <p className="text-xl font-bold text-foreground">{formatINR(convertUSDToINR(4267.89))}</p>
               <div className="flex items-center justify-center gap-1 mt-1">
                 <TrendingUp className="h-3 w-3 text-primary" />
                 <p className="text-sm text-primary font-medium">+2.7%</p>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">+115.32 pts</p>
+              <p className="text-xs text-muted-foreground mt-1">+{formatINR(convertUSDToINR(115.32))} pts</p>
             </div>
             <div className="text-center p-4 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20 hover:border-amber-500/40 transition-all duration-300">
               <div className="flex items-center justify-between mb-2">
                 <p className="text-sm text-muted-foreground">Bitcoin</p>
                 <BarChart3 className="h-3 w-3 text-amber-500" />
               </div>
-              <p className="text-xl font-bold text-foreground">$47,125</p>
+              <p className="text-xl font-bold text-foreground">{formatINR(convertUSDToINR(47125))}</p>
               <div className="flex items-center justify-center gap-1 mt-1">
                 <TrendingUp className="h-3 w-3 text-amber-500" />
                 <p className="text-sm text-amber-500 font-medium">+5.8%</p>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">+$2,580</p>
+              <p className="text-xs text-muted-foreground mt-1">+{formatINR(convertUSDToINR(2580))}</p>
             </div>
             <div className="text-center p-4 rounded-xl bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/20 hover:border-green-500/40 transition-all duration-300">
               <div className="flex items-center justify-between mb-2">
                 <p className="text-sm text-muted-foreground">NASDAQ</p>
                 <TrendingUp className="h-3 w-3 text-green-500" />
               </div>
-              <p className="text-xl font-bold text-foreground">13,542.78</p>
+              <p className="text-xl font-bold text-foreground">{formatINR(convertUSDToINR(13542.78))}</p>
               <div className="flex items-center justify-center gap-1 mt-1">
                 <TrendingUp className="h-3 w-3 text-green-500" />
                 <p className="text-sm text-green-500 font-medium">+1.9%</p>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">+252.15 pts</p>
+              <p className="text-xs text-muted-foreground mt-1">+{formatINR(convertUSDToINR(252.15))} pts</p>
             </div>
             <div className="text-center p-4 rounded-xl bg-gradient-to-br from-red-500/10 to-red-600/10 border border-red-500/20 hover:border-red-500/40 transition-all duration-300">
               <div className="flex items-center justify-between mb-2">
                 <p className="text-sm text-muted-foreground">Gold</p>
                 <TrendingDown className="h-3 w-3 text-red-500" />
               </div>
-              <p className="text-xl font-bold text-foreground">$2,034</p>
+              <p className="text-xl font-bold text-foreground">{formatINR(convertUSDToINR(2034))}</p>
               <div className="flex items-center justify-center gap-1 mt-1">
                 <TrendingDown className="h-3 w-3 text-red-500" />
                 <p className="text-sm text-red-500 font-medium">-0.8%</p>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">-$16.50</p>
+              <p className="text-xs text-muted-foreground mt-1">-{formatINR(convertUSDToINR(16.50))}</p>
             </div>
           </div>
           <div className="mt-4 p-3 rounded-xl glass-card border border-primary/10">
@@ -526,7 +527,7 @@ export function HomePage() {
               
               <div className="flex items-start gap-3 mb-4">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-blue-500/20 border border-primary/30 flex items-center justify-center">
-                  <span className="text-sm font-medium text-primary">JD</span>
+                  <span className="text-sm font-medium text-primary">{currentUser.initials}</span>
                 </div>
                 <div className="flex-1">
                   <Textarea

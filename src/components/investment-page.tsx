@@ -2,55 +2,56 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Progress } from "./ui/progress";
+import { formatINR, convertUSDToINR } from '../utils/currency';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { TrendingUp, TrendingDown, DollarSign, Target, Brain, Star, AlertCircle, Activity, Zap } from "lucide-react";
 
 const portfolioData = [
-  { month: 'Jan', value: 8500 },
-  { month: 'Feb', value: 8720 },
-  { month: 'Mar', value: 8450 },
-  { month: 'Apr', value: 8890 },
-  { month: 'May', value: 8650 },
-  { month: 'Jun', value: 8945 },
+  { month: 'Jan', value: convertUSDToINR(8500) },
+  { month: 'Feb', value: convertUSDToINR(8720) },
+  { month: 'Mar', value: convertUSDToINR(8450) },
+  { month: 'Apr', value: convertUSDToINR(8890) },
+  { month: 'May', value: convertUSDToINR(8650) },
+  { month: 'Jun', value: convertUSDToINR(8945) },
 ];
 
 const holdings = [
-  { symbol: 'AAPL', name: 'Apple Inc.', shares: 25, currentPrice: 185.43, totalValue: 4635.75, change: 2.4, allocation: 20.8 },
-  { symbol: 'TSLA', name: 'Tesla Inc.', shares: 15, currentPrice: 248.50, totalValue: 3727.50, change: -1.2, allocation: 16.7 },
-  { symbol: 'MSFT', name: 'Microsoft Corp.', shares: 12, currentPrice: 412.80, totalValue: 4953.60, change: 1.8, allocation: 22.2 },
-  { symbol: 'NVDA', name: 'NVIDIA Corp.', shares: 8, currentPrice: 445.20, totalValue: 3561.60, change: 4.5, allocation: 16.0 },
-  { symbol: 'SPY', name: 'SPDR S&P 500 ETF', shares: 35, currentPrice: 418.50, totalValue: 14647.50, change: 0.9, allocation: 24.3 },
+  { symbol: 'RELIANCE', name: 'Reliance Industries', shares: 25, currentPrice: convertUSDToINR(185.43), totalValue: convertUSDToINR(4635.75), change: 2.4, allocation: 20.8 },
+  { symbol: 'TCS', name: 'Tata Consultancy Services', shares: 15, currentPrice: convertUSDToINR(248.50), totalValue: convertUSDToINR(3727.50), change: -1.2, allocation: 16.7 },
+  { symbol: 'INFY', name: 'Infosys Limited', shares: 12, currentPrice: convertUSDToINR(412.80), totalValue: convertUSDToINR(4953.60), change: 1.8, allocation: 22.2 },
+  { symbol: 'HDFCBANK', name: 'HDFC Bank', shares: 8, currentPrice: convertUSDToINR(445.20), totalValue: convertUSDToINR(3561.60), change: 4.5, allocation: 16.0 },
+  { symbol: 'NIFTYBEES', name: 'Nifty 50 ETF', shares: 35, currentPrice: convertUSDToINR(418.50), totalValue: convertUSDToINR(14647.50), change: 0.9, allocation: 24.3 },
 ];
 
 const aiRecommendations = [
   {
-    symbol: 'AMD',
-    name: 'Advanced Micro Devices',
-    price: 152.30,
+    symbol: 'WIPRO',
+    name: 'Wipro Limited',
+    price: convertUSDToINR(152.30),
     recommendation: 'BUY',
     confidence: 85,
-    reason: 'Strong growth in data center market and AI chip demand',
-    targetPrice: 180.00,
+    reason: 'Strong growth in IT services and digital transformation demand',
+    targetPrice: convertUSDToINR(180.00),
     riskLevel: 'Medium'
   },
   {
-    symbol: 'GOOGL',
-    name: 'Alphabet Inc.',
-    price: 142.65,
+    symbol: 'ITC',
+    name: 'ITC Limited',
+    price: convertUSDToINR(142.65),
     recommendation: 'HOLD',
     confidence: 72,
-    reason: 'AI advancements offset by regulatory concerns',
-    targetPrice: 155.00,
+    reason: 'Diversified portfolio offset by regulatory concerns in tobacco',
+    targetPrice: convertUSDToINR(155.00),
     riskLevel: 'Low'
   },
   {
-    symbol: 'SHOP',
-    name: 'Shopify Inc.',
-    price: 68.45,
+    symbol: 'ZOMATO',
+    name: 'Zomato Limited',
+    price: convertUSDToINR(68.45),
     recommendation: 'BUY',
     confidence: 78,
-    reason: 'E-commerce recovery and platform improvements',
-    targetPrice: 85.00,
+    reason: 'Food delivery market recovery and quick commerce expansion',
+    targetPrice: convertUSDToINR(85.00),
     riskLevel: 'High'
   },
 ];
@@ -63,9 +64,9 @@ const portfolioAllocation = [
 ];
 
 const investmentGoals = [
-  { name: 'Retirement Fund', target: 500000, current: 125000, timeframe: '25 years' },
-  { name: 'House Down Payment', target: 80000, current: 15000, timeframe: '5 years' },
-  { name: 'Kids Education', target: 200000, current: 32000, timeframe: '15 years' },
+  { name: 'Retirement Fund', target: convertUSDToINR(500000), current: convertUSDToINR(125000), timeframe: '25 years' },
+  { name: 'House Down Payment', target: convertUSDToINR(80000), current: convertUSDToINR(15000), timeframe: '5 years' },
+  { name: 'Kids Education', target: convertUSDToINR(200000), current: convertUSDToINR(32000), timeframe: '15 years' },
 ];
 
 export function InvestmentPage() {
@@ -94,7 +95,7 @@ export function InvestmentPage() {
                 <DollarSign className="h-5 w-5 text-primary" />
                 <span className="text-primary/80 text-sm font-medium">Total Portfolio Value</span>
               </div>
-              <h2 className="text-4xl font-bold text-foreground mb-2">${totalValue.toLocaleString()}</h2>
+              <h2 className="text-4xl font-bold text-foreground mb-2">{formatINR(totalValue)}</h2>
               <div className="flex items-center gap-2">
                 {totalGainLoss >= 0 ? (
                   <TrendingUp className="h-4 w-4 text-primary" />
@@ -113,7 +114,7 @@ export function InvestmentPage() {
                 <span className="text-primary/80 text-sm font-medium">Today's P&L</span>
               </div>
               <div className={`text-2xl font-bold ${totalGainLoss >= 0 ? 'text-primary' : 'text-red-500'}`}>
-                ${totalGainLoss >= 0 ? '+' : ''}${totalGainLoss.toFixed(2)}
+                {totalGainLoss >= 0 ? '+' : ''}{formatINR(totalGainLoss)}
               </div>
             </div>
           </div>
@@ -190,7 +191,7 @@ export function InvestmentPage() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-foreground text-lg">${rec.price}</p>
+                  <p className="font-bold text-foreground text-lg">{formatINR(rec.price)}</p>
                   <Badge 
                     variant={rec.recommendation === 'BUY' ? 'default' : rec.recommendation === 'SELL' ? 'destructive' : 'secondary'}
                     className={`${
@@ -213,7 +214,7 @@ export function InvestmentPage() {
                 </div>
                 <div className="p-3 rounded-xl bg-primary/5 border border-primary/10">
                   <div className="text-muted-foreground mb-2">Target Price</div>
-                  <div className="font-semibold text-foreground">${rec.targetPrice}</div>
+                  <div className="font-semibold text-foreground">{formatINR(rec.targetPrice)}</div>
                 </div>
               </div>
               <p className="text-sm text-foreground mb-4 leading-relaxed">{rec.reason}</p>
@@ -261,11 +262,11 @@ export function InvestmentPage() {
                 </div>
                 <div>
                   <p className="font-semibold text-foreground">{holding.symbol}</p>
-                  <p className="text-sm text-muted-foreground">{holding.shares} shares @ ${holding.currentPrice}</p>
+                  <p className="text-sm text-muted-foreground">{holding.shares} shares @ {formatINR(holding.currentPrice)}</p>
                 </div>
               </div>
               <div className="text-right">
-                <p className="font-bold text-foreground text-lg">${holding.totalValue.toLocaleString()}</p>
+                <p className="font-bold text-foreground text-lg">{formatINR(holding.totalValue)}</p>
                 <div className="flex items-center gap-1 justify-end">
                   {holding.change >= 0 ? (
                     <TrendingUp className="h-3 w-3 text-primary" />
@@ -364,15 +365,15 @@ export function InvestmentPage() {
                 <div className="space-y-3">
                   <Progress value={percentage} className="h-3 bg-primary/20" />
                   <div className="flex justify-between text-sm">
-                    <span className="text-primary font-medium">${goal.current.toLocaleString()} saved</span>
-                    <span className="text-muted-foreground">${goal.target.toLocaleString()} target</span>
+                    <span className="text-primary font-medium">{formatINR(goal.current)} saved</span>
+                    <span className="text-muted-foreground">{formatINR(goal.target)} target</span>
                   </div>
                   <div className="text-xs text-muted-foreground flex items-center justify-between">
                     <span className="flex items-center gap-1">
                       <Zap className="h-3 w-3 text-primary" />
                       {percentage.toFixed(1)}% complete
                     </span>
-                    <span>${(goal.target - goal.current).toLocaleString()} remaining</span>
+                    <span>{formatINR(goal.target - goal.current)} remaining</span>
                   </div>
                 </div>
               </div>
